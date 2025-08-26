@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Grade Calculator</h1>
+    <label id="marksLabel" for="marks">Enter your marks (0-100):</label>
+    <input type="number" id="marks" min="0" max="100">
+    <button id="getGradeButton">Convert</button>
+    <p id="gradeResult"></p>
+    
+    <script>
+        document.getElementById("getGradeButton").addEventListener("click", function(){
+            let marksInput=document.getElementById("marks").value.trim();
+            let grade=" ";
+            if(marksInput == "")
+            {
+                grade="Enter any marks to get the grades.";
+            }
+            else {
+                let marks=parseInt(marksInput);
+                if(isNaN(marks) || marks<0 || marks>100)
+                {
+                    grade="The marks should be between 0-100";
+                }
+                else if(marks>=90 && marks<=100)
+                {
+                    grade = `For marks ${marks}, your grade is A`;
+                }
+                else if(marks>=80 && marks<90)
+                {
+                    grade = `For marks ${marks}, your grade is B`;
+                }
+                else if(marks>=70 && marks<80)
+                {
+                    grade = `For marks ${marks}, your grade is C`;
+                }
+                else if(marks>=60 && marks<70)
+                {
+                    grade = `For marks ${marks}, your grade is D`;
+                }
+                else if(marks<60 && marks>=0)
+                {
+                    grade = `For marks ${marks}, your grade is F`;
+                }
+            }
+            document.getElementById("gradeResult").innerText=grade;
+        })
+    </script>
+</body>
+</html>
