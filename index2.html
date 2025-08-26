@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Habit Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1 {
+      color: #333;
+    }
+    #mark-progress {
+      background-color: rgb(41, 168, 71);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    #reset-progress {
+      background-color: #d9534f;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 10px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+    .habit {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Habit Tracker</h1>
+
+  <div class="habit">
+    <input type="checkbox" id="chkWater"> Drink Water
+  </div>
+  <div class="habit">
+    <input type="checkbox" id="chkExercise"> Exercise
+  </div>
+  <div class="habit">
+    <input type="checkbox" id="chkReading"> Reading
+  </div>
+
+  <p id="summary">You have completed 0 habits today.</p>
+
+  <button id="mark-progress">Mark Progress</button>
+  <button id="reset-progress">Reset</button>
+
+  <script>
+    const summary = document.getElementById("summary");
+    const markBtn = document.getElementById("mark-progress");
+    const resetBtn = document.getElementById("reset-progress");
+
+    const checkboxes = [
+      document.getElementById("chkWater"),
+      document.getElementById("chkExercise"),
+      document.getElementById("chkReading")
+    ];
+
+    markBtn.addEventListener("click", () => {
+      let count = checkboxes.filter(cb => cb.checked).length;
+      summary.textContent = `You have completed ${count} habits today.`;
+    });
+
+    resetBtn.addEventListener("click", () => {
+      checkboxes.forEach(cb => cb.checked = false);
+      summary.textContent = "You have completed 0 habits today.";
+    });
+  </script>
+</body>
+</html>
