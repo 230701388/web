@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Building Material Inventory Management System</title>
+  <style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        padding: 20px;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    }
+    .card {
+        background-color: white;
+        padding: 20px;
+        border-radius: 6px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        width: 400px;
+    }
+    h3 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .subheading {
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+    .field {
+        margin-bottom: 15px;
+    }
+    label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    input,
+    select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    #addMaterialBtn {
+        width: 100%;
+        padding: 10px;
+        border: none;
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    #addMaterialBtn:hover {
+        opacity: 0.9;
+    }
+    .error {
+        display: block;
+        color: red;
+        margin-top: 10px;
+        font-weight: bold;
+    }
+    .table-wrap {
+        overflow-x: auto;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    th,
+    td {
+        padding: 8px;
+        text-align: center;
+        border: 1px solid #ddd;
+    }
+    th {
+        background-color: #4CAF50;
+        color: white;
+    }
+    .summary {
+        margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="card">
+      <h3>Building Material Inventory</h3>
+      <form id="materialForm" novalidate>
+        <div class="field">
+          <label for="materialName">Material Name:</label>
+          <input type="text" id="materialName" placeholder="Enter material name"/>
+        </div>
+        <div class="field">
+          <label for="category">Material Category:</label>
+          <select id="category">
+            <option value="Wood">Wood</option>
+            <option value="Cement">Cement</option>
+            <option value="Steel">Steel</option>
+            <option value="Bricks">Bricks</option>
+            <option value="Glass">Glass</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="quantity">Quantity:</label>
+          <input type="number" id="quantity" placeholder="Enter quantity"/>
+        </div>
+        <div class="field">
+          <label for="supplierName">Supplier Name:</label>
+          <input type="text" id="supplierName" placeholder="Enter supplier name"/>
+        </div>
+        <div class="field">
+          <label for="costPerUnit">Cost Per Unit (RS):</label>
+          <input type="number" id="costPerUnit" placeholder="Enter cost per unit" step="0.01"/>
+        </div>
+        <button id="addMaterialBtn" type="button" style="background-color: rgb(76, 175, 80);">Submit Material</button>
+        <span id="error-message" class="error"></span>
+      </form>
+      <h4 class="subheading">Material List:</h4>
+      <div class="table-wrap">
+        <table id="materialTable">
+          <thead>
+            <tr>
+              <th>Material Name</th>
+              <th>Category</th>
+              <th>Quantity</th>
+              <th>Supplier</th>
+              <th>Cost Per Unit (RS)</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <section class="summary">
+        <h4 class="subheading">Inventory Summary:</h4>
+        <p>Total Products: <span id="totalProducts">0</span></p>
+        <p>Most Expensive Product: <span id="mostExpensive">None</span></p>
+      </section>
+    </section>
+  </main>
+  <script>
+    const materialNameInput=document.getElementById("materialName");
+    const categoryInput=document.getElementById("category");
+    const quantityInput=document.getElementById("quantity");
+    const supplierNameInput=document.getElementById("supplierName");
+    const costPerUnitInput=document.getElementById("costPerUnit");
+    const addMaterialBtn=document.getElementById("addMaterialBtn");
+    const errorMessage=document.getElementById("error-message");
+    const materialTableBody=document.getElementById("materialTable").querySelector("tbody");
+    const totalProductsSpan=document.getElementById("totalProducts");
+    const mostExpensiveSpan=document.getElementById("mostExpensive");
+    let materials=[];
+    addMaterialBtn.addEventListener("click",() =>{
+        const name=materialNameInput.value.trim();
+        const category=categoryInput.value;
+        const quantity=quantityInput.value.trim();
+        const supplier=supplierNameInput.value.trim();
+        const cost=costPerUnitInput.value.trim();
+        if(!name || !category || !quantity || !supplier || !cost){
+            errorMessage.textContent="Please fill out all fields!";
+            return;
+        }
+        if(Number(quantity)<=0 || Number(cost)<=0){
+            errorMessage.textContent="Quantity and cost must be positive numbers!";
+            return;
+        }
+        errorMessage.textContent="";
+        const material={
+            name,
+            category,
+            quantity: Number(quantity),
+            supplier,
+            cost: Number(cost)
+        };
+        materials.push(material);
+        renderTable();
+        updateSummary();
+        materialNameInput.value="";
+        categoryInput.value="Wood";
+        quantityInput.value="";
+        supplierNameInput.value="";
+        costPerUnitInput.value="";
+    });
+    function renderTable(){
+        materialTableBody.innerHTML="";
+        materials.forEach(mat => {
+            const row=document.createElement("tr");
+            row.innerHTML=`
+            <td>${mat.name}</td>
+            <td>${mat.category}</td>
+            <td>${mat.quantity}</td>
+            <td>${mat.supplier}</td>
+            <td>RS ${mat.cost.toFixed(2)}</td>
+            `;
+            materialTableBody.appendChild(row);
+        });
+    }
+    function updateSummary() {
+        totalProductsSpan.textContent=materials.length;
+        if(materials.length>0){
+            let expensiveMaterial=materials.reduce((prev,current)=>
+            current.cost >prev.cost ? current : prev
+            );
+            mostExpensiveSpan.textContent=`${expensiveMaterial.name} (RS ${expensiveMaterial.cost.toFixed(2)})`;
+        } else{
+            mostExpensiveSpan.textContent="None";
+        }
+    }
+  </script>
+</body>
+</html>
