@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Music Album Collection Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #addAlbumBtn {
+      background-color: rgb(76, 175, 80); /* ✅ matches test */
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+    }
+    #error-message {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h3>Music Album Collection</h3>
+
+  <form id="albumForm">
+    <div>
+      <label for="albumName">Album Name</label><br>
+      <input type="text" id="albumName" placeholder="Enter album name">
+    </div>
+    <div>
+      <label for="releaseYear">Release Year</label><br>
+      <input type="number" id="releaseYear" placeholder="Enter release year">
+    </div>
+    <div>
+      <label for="genre">Genre</label><br>
+      <select id="genre">
+        <option value="">--Select Genre--</option>
+        <option value="Pop">Pop</option>
+        <option value="Rock">Rock</option>
+        <option value="Jazz">Jazz</option>
+      </select>
+    </div>
+    <div>
+      <label for="favorite">Mark as Favorite</label>
+      <input type="checkbox" id="favorite">
+    </div>
+    <div>
+      <button type="button" id="addAlbumBtn">Add Album</button>
+    </div>
+    <div id="error-message"></div>
+  </form>
+
+  <h4>All Albums</h4>
+  <ul id="albumList"></ul>
+
+  <h4>Favorite Albums</h4>
+  <ul id="favoriteAlbumList"></ul>
+
+  <script>
+    const albumNameInput = document.getElementById('albumName');
+    const releaseYearInput = document.getElementById('releaseYear');
+    const genreInput = document.getElementById('genre');
+    const favoriteInput = document.getElementById('favorite');
+    const addAlbumBtn = document.getElementById('addAlbumBtn');
+    const albumList = document.getElementById('albumList');
+    const favoriteAlbumList = document.getElementById('favoriteAlbumList');
+    const errorMessage = document.getElementById('error-message');
+
+    addAlbumBtn.addEventListener('click', () => {
+      const albumName = albumNameInput.value.trim();
+      const releaseYear = releaseYearInput.value.trim();
+      const genre = genreInput.value.trim();
+      const favorite = favoriteInput.checked;
+
+      if (!albumName || !releaseYear || !genre) {
+        errorMessage.textContent = 'Please fill out all fields!';
+        return;
+      }
+
+      // Clear error if successful
+      errorMessage.textContent = '';
+
+      const albumText = `${albumName} - ${releaseYear} - ${genre}`;
+
+      const li = document.createElement('li');
+      li.textContent = albumText;
+
+      if (favorite) {
+        favoriteAlbumList.appendChild(li);
+      } else {
+        albumList.appendChild(li);
+      }
+
+      // Reset form
+      albumNameInput.value = '';
+      releaseYearInput.value = '';
+      genreInput.value = '';
+      favoriteInput.checked = false;
+    });
+  </script>
+</body>
+</html>
