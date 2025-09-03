@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Z-Index</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f4f8;
+            color: #333;
+        }
+
+        .container {
+            position: relative;
+            width: 350px;
+            height: 350px;
+            margin-bottom: 2rem;
+        }
+        
+        .overlapping-img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            transition: z-index 0.3s, transform 0.3s;
+        }
+
+        #img1 {
+            transform: translate(-60%, -60%);
+            z-index: 1;
+        }
+        
+        #img2 {
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+        
+        #img3 {
+            transform: translate(-40%, -40%);
+            z-index: 3;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 1rem;
+        }
+    </style>
+</head>
+<body class="p-4">
+
+    <h1 class="text-3xl font-bold mb-8 text-gray-800">Dynamic Z-Index Images</h1>
+    <div class="container rounded-2xl">
+        <img id="img1" class="overlapping-img rounded-xl" src="https://placehold.co/200x200/4c7c8c/ffffff?text=Image+1" alt="Image 1">
+        <img id="img2" class="overlapping-img rounded-xl" src="https://placehold.co/200x200/98b7c7/ffffff?text=Image+2" alt="Image 2">
+        <img id="img3" class="overlapping-img rounded-xl" src="https://placehold.co/200x200/c7d6e1/ffffff?text=Image+3" alt="Image 3">
+    </div>
+
+    <div class="btn-container">
+        <button id="btn1" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-md transition-all">Button 1</button>
+        <button id="btn2" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-md transition-all">Button 2</button>
+        <button id="btn3" class="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-lg shadow-md transition-all">Button 3</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get references to all images and buttons
+            const images = document.querySelectorAll('.overlapping-img');
+            const btn1 = document.getElementById('btn1');
+            const btn2 = document.getElementById('btn2');
+            const btn3 = document.getElementById('btn3');
+
+            /**
+             * Resets all image z-index values and brings the specified image to the front.
+             * @param {string} imageId - The ID of the image to bring to the front.
+             */
+            const bringToFront = (imageId) => {
+                images.forEach(img => {
+                    // Set all images to a base z-index of 1
+                    img.style.zIndex = '1';
+                });
+                
+                // Set the selected image's z-index to a high value (10) to bring it to the front
+                document.getElementById(imageId).style.zIndex = '10';
+            };
+
+            // Add click event listeners to each button
+            btn1.addEventListener('click', () => {
+                bringToFront('img1');
+            });
+            
+            btn2.addEventListener('click', () => {
+                bringToFront('img2');
+            });
+
+            btn3.addEventListener('click', () => {
+                bringToFront('img3');
+            });
+        });
+    </script>
+
+</body>
+</html>
