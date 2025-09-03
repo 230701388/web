@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Highlight Text</title>
+    <style>
+        .highlight {
+            background-color: yellow;
+        }
+    </style>
+</head>
+<body>
+    <p id="textPara">This is a paragraph of text that can be highlighted.</p>
+    <button id="highlightBtn">Highlight</button>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const highlightBtn = document.getElementById('highlightBtn');
+            const textPara = document.getElementById('textPara');
+
+            if (highlightBtn && textPara) {
+                highlightBtn.addEventListener('click', () => {
+                    textPara.classList.toggle('highlight');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
